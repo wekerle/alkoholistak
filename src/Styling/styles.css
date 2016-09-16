@@ -1,0 +1,54 @@
+.pane 
+{
+    -fx-background-color: #8fbc8f;
+}
+
+.grid 
+{
+    -fx-background-color: white;
+    -fx-background-radius: 5.0;
+    -fx-background-insets: 0.0 5.0 0.0 5.0;
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.tableCellDragOverBorderTop 
+{
+    -fx-border-color: lightskyblue;
+    -fx-border-width: 2 0 0 0
+}
+
+.tableCellDragOverBorderBottom 
+{
+    -fx-border-color: lightskyblue;
+    -fx-border-width: 0 0 2 0
+}
+
+.tableCellSala
+{
+    -fx-text-alignment:center;
+}
+.tableCellSala TextField
+{
+    -fx-text-alignment:center;
+}
+
+.warningTableCell
+{
+    -fx-border-color: chocolate;
+    -fx-border-style: solid inside;
+    -fx-border-width: 0.5;
+    -fx-background-color: bisque;
+}
+
+.warningBoxCell
+{
+    -fx-padding: 10;
+    -fx-border-style: solid inside;
+    -fx-border-width: 2;
+    -fx-background-radius:10;
+    -fx-border-radius: 10;
+    -fx-background-color: bisque;
+    -fx-border-color: chocolate;
+}
