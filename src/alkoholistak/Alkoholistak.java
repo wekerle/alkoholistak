@@ -64,7 +64,7 @@ public class Alkoholistak extends Application {
         primaryStage.setWidth(800);
         primaryStage.setHeight(600);
         
-        primaryStage.setTitle("IEEE Conference Manager");
+        primaryStage.setTitle("Alkoholistak");
         primaryStage.setScene(scene);
         primaryStage.show();
         
