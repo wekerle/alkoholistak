@@ -5,8 +5,11 @@
  */
 package alkoholistak;
 
-import Helpers.StringHelper;
+import Listener.LevelClickEventListener;
 import Models.AplicationModel;
+import Models.LevelModel;
+import ViewModels.LevelView;
+import ViewModels.MinimalLevelView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,11 +31,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -42,10 +42,11 @@ import javafx.stage.WindowEvent;
  *
  * @author tibor.wekerle
  */
-public class Alkoholistak extends Application {
-    
+public class Alkoholistak extends Application implements LevelClickEventListener
+{   
     private BorderPane borderPane = new BorderPane();
     private AplicationModel aplicationModel=new AplicationModel();
+    private Converter converter = new Converter();
     private Scene scene=new Scene(borderPane);
     private byte[] aplicationModelSerialized;
     private Stage stage=null;
@@ -53,10 +54,12 @@ public class Alkoholistak extends Application {
     @Override
     public void start(Stage primaryStage) 
     {
+        DataCollector dataCollector=new DataCollector();
+        aplicationModel.setLevels(dataCollector.getLevels());
         
         MenuBar menuBar=createMenu();       
         borderPane.setTop(menuBar);                 
-        borderPane.setCenter(addAnchorPane(addGridPane()));
+        borderPane.setCenter(getContent());
         stage=primaryStage;
     
         scene.getStylesheets().add("Styling/styles.css");
@@ -155,7 +158,7 @@ public class Alkoholistak extends Application {
         // --- Menu File
         Menu menuFile = new Menu("Menu");
         
-        MenuItem newMenuItem = new MenuItem("Home");
+        MenuItem homeMenuItem = new MenuItem("Home");
         MenuItem loadMenuItem = new MenuItem("Load");
         MenuItem saveMenuItem = new MenuItem("Save");
         MenuItem exitMenuItem = new MenuItem("Exit");
@@ -167,10 +170,10 @@ public class Alkoholistak extends Application {
                         )
                 ));
 
-        menuFile.getItems().addAll(newMenuItem,loadMenuItem, saveMenuItem,
+        menuFile.getItems().addAll(homeMenuItem,loadMenuItem, saveMenuItem,
         new SeparatorMenuItem(), exitMenuItem);
         
-        newMenuItem.setOnAction(actionEvent -> clickNew());
+        homeMenuItem.setOnAction(actionEvent -> clickHome());
         saveMenuItem.setOnAction(actionEvent -> clickSave());
         loadMenuItem.setOnAction(actionEvent -> clickLoad());
                       
@@ -180,27 +183,16 @@ public class Alkoholistak extends Application {
 
     }
     
-    private void clickNew()
-    {
-        int numberOfDays=2;
-        int deafultBreakDuration=5;
-        
-        ButtonType buttonTypeNext = new ButtonType("Next", ButtonBar.ButtonData.NEXT_FORWARD);
-        ButtonType buttonCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Optional<ButtonType> result;
-        Dialog dialog = new Dialog<>();
-
-        dialog.setHeaderText("Insert deafult break duration:");
-        dialog.getDialogPane().setPrefSize(200, 150);
-        
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeNext);
-        dialog.getDialogPane().getButtonTypes().add(buttonCancel);
-
-        result = dialog.showAndWait();
-
-        
+    private void clickHome()
+    {              
         setAplicationModelSerialized();       
         start(stage);      
+    }
+    
+    private void renderLevel(LevelModel level)
+    {
+        LevelView levelView=new LevelView(level);
+        borderPane.setCenter(levelView);      
     }
     
     private void setAplicationModelSerialized()
@@ -293,31 +285,25 @@ public class Alkoholistak extends Application {
         }
     }
         
-    private GridPane addGridPane() 
+    private GridPane getContent() 
     {
         GridPane grid = new GridPane();   
-        grid.getStyleClass().add("grid");
-
-        Text title = new Text("Să începem jocul");
-        title.setFont(StringHelper.font20Bold);
-        grid.add(title, 1, 0); 
-                
-        Text chartSubtitle = new Text("În acest joc trebuie să faceți să ajungă băutura la toți din gască. Trebuie să rotiți în stânga și în dreapta structura.\n"
-                + "Pentru acesta trebuie să dați cu mouse-ul click pe care dintre săgeți. Puteți face save, și ziua următoare să continuți de unde ați rămas.");
-        grid.add(chartSubtitle, 1, 1, 2, 1);
-              
+        
+        int i=1;
+        for(LevelModel level :aplicationModel.getLevels())
+        {
+            MinimalLevelView minimalLevel= new MinimalLevelView(level.getLevelId(), level.getLevelNumber());
+            minimalLevel.setLevelClickEventListener(this);
+            
+            grid.add(minimalLevel,i+1,i+1);
+            i++;
+        }
         return grid;
     }
- 
-    private AnchorPane addAnchorPane(GridPane grid) 
-    {
-        AnchorPane anchorpane = new AnchorPane();
-        anchorpane.getStyleClass().add("pane");
-        
-        anchorpane.getChildren().add(grid);
-        AnchorPane.setTopAnchor(grid, 10.0);
 
-        return anchorpane;
-    }
-    
+    @Override
+    public void levelSelected(int levelId) 
+    {
+        renderLevel(aplicationModel.getLevelById(levelId));
+    }    
 }
