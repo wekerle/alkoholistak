@@ -24,9 +24,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -73,13 +71,6 @@ public class Alkoholistak extends Application implements LevelClickEventListener
         
         stage.setOnCloseRequest(confirmCloseEventHandler);
                 
-        Parameters params = getParameters();
-        List<String> parameters=params.getRaw();
-        
-        if(parameters.size()>0)
-        {
-            this.aplicationModel=fileToAplicationModel(parameters.get(0));
-        }
     }
     
     private EventHandler<WindowEvent> confirmCloseEventHandler = event -> 
@@ -289,14 +280,21 @@ public class Alkoholistak extends Application implements LevelClickEventListener
     {
         GridPane grid = new GridPane();   
         
-        int i=1;
+        int i=0;
+        int j=0;
         for(LevelModel level :aplicationModel.getLevels())
         {
             MinimalLevelView minimalLevel= new MinimalLevelView(level.getLevelId(), level.getLevelNumber());
             minimalLevel.setLevelClickEventListener(this);
             
-            grid.add(minimalLevel,i+1,i+1);
-            i++;
+            grid.add(minimalLevel,j,i);
+            
+            j++;
+            if(j==6)
+            {
+                i++;
+                j=0;
+            }
         }
         return grid;
     }

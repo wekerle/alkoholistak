@@ -6,6 +6,8 @@
 package ViewModels;
 
 import Models.LevelModel;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -28,13 +30,24 @@ public class LevelView extends GridPane{
         int height=matrix.length;
         int width=matrix[0].length;
         
+        //Button buttonAdd=new Button();
+        //buttonAdd.setGraphic(new ImageView(imageAdd));
+        
         for(int i=0;i<height;i++)
         {
             for(int j=0;j<width;j++)
             {
+                //# -fal
+                //a -alkololista
+                //b -nem alkoholista
+                //b -vas lada
                 switch(matrix[i][j])
                 {
                     case '#':
+                        Image imageWall=new Image("/img/wall.png");
+                        ImageView iv1 = new ImageView();
+                        iv1.setImage(imageWall);
+                        grid.add(iv1,j,i);
                         break;
                     case 'a':
                         break;
@@ -43,5 +56,6 @@ public class LevelView extends GridPane{
                 }
             }
         }
+        this.getChildren().add(grid); 
     }
 }
