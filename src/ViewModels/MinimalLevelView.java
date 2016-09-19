@@ -7,8 +7,12 @@ package ViewModels;
 
 import Listener.LevelClickEventListener;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
@@ -43,6 +47,8 @@ public class MinimalLevelView extends HBox{
     {
         this.getStyleClass().add("minimalLevelView");
         Text levelNumberText=new Text(Integer.toString(levelNumber));
+        levelNumberText.setFont(Font.font("TimesNewRoman",FontWeight.BOLD,40));
+        this.setAlignment(Pos.CENTER);
         this.getChildren().add(levelNumberText);
     }
 }

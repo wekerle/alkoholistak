@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -286,7 +287,6 @@ public class Alkoholistak extends Application implements LevelClickEventListener
         {
             MinimalLevelView minimalLevel= new MinimalLevelView(level.getLevelId(), level.getLevelNumber());
             minimalLevel.setLevelClickEventListener(this);
-            
             grid.add(minimalLevel,j,i);
             
             j++;
@@ -296,6 +296,9 @@ public class Alkoholistak extends Application implements LevelClickEventListener
                 j=0;
             }
         }
+        grid.setHgap(25);
+        grid.setVgap(25);
+        grid.setPadding(new Insets(20, 10, 10, 50));
         return grid;
     }
 

@@ -6,13 +6,17 @@
 package ViewModels;
 
 import Models.LevelModel;
+import javafx.animation.RotateTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 /**
  *
@@ -101,14 +105,36 @@ public class LevelView extends GridPane{
         Button buttonRotRight=new Button();
         buttonRotRight.setGraphic(new ImageView(imageRotRight));
         
+        buttonRotRight.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+
+            @Override
+            public void handle(MouseEvent event) {
+                RotateTransition rt = new RotateTransition(Duration.millis(3000), LevelView.this.grid);
+                rt.setFromAngle(0);
+                rt.setToAngle(360);
+                rt.setCycleCount(2);
+                rt.setAutoReverse(true);
+
+                rt.play();
+            }
+        });
+        
+        buttonRotLeft.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+
+            @Override
+            public void handle(MouseEvent event) {
+               LevelView.this.grid.setRotate(-90);
+            }
+        });
+        
         HBox hb= new HBox();
         hb.getChildren().add(buttonRotLeft);
         hb.getChildren().add(buttonRotRight);
         
         hb.setAlignment(Pos.CENTER);
         grid.setPadding(new Insets(10, 10, 10, 10));
-       // this.getChildren().add(grid); 
-        //this.getChildren().add(hb);
         this.add(grid,0,0);
         this.add(hb,0,1);
 
