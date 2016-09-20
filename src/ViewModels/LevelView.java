@@ -6,7 +6,10 @@
 package ViewModels;
 
 import Models.LevelModel;
+import java.util.ArrayList;
 import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,16 +28,22 @@ import javafx.util.Duration;
 public class LevelView extends GridPane{
     private LevelModel level=null;
     private GridPane grid=new GridPane();
+    private RotateTransition rt = new RotateTransition(Duration.millis(1000), LevelView.this.grid);
+    private int fromAngel = 0;
+    private int toAngel = 0;
+    private ArrayList<ImageView> gravityNodes=new ArrayList<ImageView>();
+    private char[][] matrix=null;
     
     public LevelView(LevelModel level)
     {
         this.level=level;
+        this.matrix=level.getMatrix();
         populateContent();
     }
     
     private void populateContent()
     {
-        char[][] matrix=level.getMatrix();
+        grid.getChildren().clear();
         int height=matrix.length;
         int width=matrix[0].length;
         
@@ -62,13 +71,17 @@ public class LevelView extends GridPane{
                         Image imageZombie=new Image("/img/zombie.png");
                         ImageView imageViewZombie = new ImageView();
                         imageViewZombie.setImage(imageZombie);
+                        
                         grid.add(imageViewZombie,j,i);
+                        gravityNodes.add(imageViewZombie);
                         break;
                     case 'b':
                         Image imagePeople=new Image("/img/people.png");
                         ImageView imageViewPeople = new ImageView();
                         imageViewPeople.setImage(imagePeople);
+                        
                         grid.add(imageViewPeople,j,i);
+                        gravityNodes.add(imageViewPeople);
                         break;
                     case 'c':
                         Image imageMetalBox=new Image("/img/metalBox.jpg");
@@ -107,25 +120,28 @@ public class LevelView extends GridPane{
         
         buttonRotRight.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
-
             @Override
             public void handle(MouseEvent event) {
-                RotateTransition rt = new RotateTransition(Duration.millis(3000), LevelView.this.grid);
-                rt.setFromAngle(0);
-                rt.setToAngle(360);
-                rt.setCycleCount(2);
-                rt.setAutoReverse(true);
-
+                fromAngel=toAngel;
+                toAngel+=90;
+                rt.setFromAngle(fromAngel);
+                rt.setToAngle(toAngel);
+                rt.setCycleCount(1);
                 rt.play();
             }
         });
         
         buttonRotLeft.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
-
             @Override
             public void handle(MouseEvent event) {
-               LevelView.this.grid.setRotate(-90);
+                rotateLeft();
+                fromAngel=toAngel;
+                toAngel-=90;
+                rt.setFromAngle(fromAngel);
+                rt.setToAngle(toAngel);
+                rt.setCycleCount(1);
+                rt.play();
             }
         });
         
@@ -137,6 +153,54 @@ public class LevelView extends GridPane{
         grid.setPadding(new Insets(10, 10, 10, 10));
         this.add(grid,0,0);
         this.add(hb,0,1);
+       // grid.getChildren().
+        rt.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent ae) {
+                
+               // populateContent();
+                for(ImageView imageNode:gravityNodes)
+                {
+                    /*TranslateTransition tt = new TranslateTransition(Duration.millis(2000), imageNode);
+                    tt.setFromX(imageNode.getX());
+                    tt.setToX(imageNode.getX()+100);
+                    tt.setCycleCount(4);
+                    tt.setAutoReverse(true);
 
+                    tt.play(); */
+                    
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(2000), imageNode);
+                    double fromX=imageNode.getX();
+                    double toX=fromX+50;
+                    tt.setFromX(fromX);
+                    tt.setToX(toX);
+                    tt.setCycleCount(4);
+                    tt.setAutoReverse(true);
+                    tt.play(); 
+                }             
+            }
+        });
+
+    }
+    
+    private void rotateLeft()
+    {
+        int oldHeight=matrix.length;
+        int oldWidth=matrix[0].length;
+        char[][] newMatrix= new char[oldWidth][oldHeight];
+        
+        for(int i=0;i<oldHeight;i++)
+        {
+            for(int j=0;j<oldWidth;j++)
+            {
+                //newMatrix[i][j]=matrix[j][oldWidth-i-1];
+            }
+        }
+       // matrix=newMatrix;
+    }
+    
+    private void rotateRight()
+    {
+        
     }
 }
