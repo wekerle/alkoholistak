@@ -7,8 +7,9 @@ package alkoholistak;
 
 import Listener.LevelClickEventListener;
 import Models.AplicationModel;
+import Models.GameSession;
 import Models.LevelModel;
-import ViewModels.LevelView;
+import ViewModels.GameSessionView;
 import ViewModels.MinimalLevelView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -45,7 +45,6 @@ public class Alkoholistak extends Application implements LevelClickEventListener
 {   
     private BorderPane borderPane = new BorderPane();
     private AplicationModel aplicationModel=new AplicationModel();
-    private Converter converter = new Converter();
     private Scene scene=new Scene(borderPane);
     private byte[] aplicationModelSerialized;
     private Stage stage=null;
@@ -181,10 +180,10 @@ public class Alkoholistak extends Application implements LevelClickEventListener
         start(stage);      
     }
     
-    private void renderLevel(LevelModel level)
+    private void renderLevel(GameSession gameSession)
     {
-        LevelView levelView=new LevelView(level);
-        borderPane.setCenter(levelView);      
+        GameSessionView gameSessionView=new GameSessionView(gameSession);
+        borderPane.setCenter(gameSessionView);      
     }
     
     private void setAplicationModelSerialized()
@@ -305,6 +304,7 @@ public class Alkoholistak extends Application implements LevelClickEventListener
     @Override
     public void levelSelected(int levelId) 
     {
-        renderLevel(aplicationModel.getLevelById(levelId));
+        GameSession gameSession=new GameSession(aplicationModel.getLevelById(levelId));
+        renderLevel(gameSession);
     }    
 }
