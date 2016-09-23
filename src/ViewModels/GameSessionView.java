@@ -5,12 +5,22 @@
  */
 package ViewModels;
 
+import Helpers.Enums;
+import Models.Alkoholista;
+import Models.Bomba;
 import Models.GameObject;
 import Models.GameSession;
+import Models.NemAlkoholista;
+import Models.Tuske;
+import Models.VasLada;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -28,9 +38,11 @@ import javafx.util.Duration;
 public class GameSessionView extends GridPane{
     private GridPane grid=new GridPane();
     private RotateTransition rt = new RotateTransition(Duration.millis(500), GameSessionView.this.grid);
-    private int fromAngel = 0;
-    private int toAngel = 0;
+    private int fromAngel=0,toAngel = 0,height=0,width;
     private GameSession gameSession=null;
+    Enums.GravitacioIranya gravitacioIranya=Enums.GravitacioIranya.Le;
+    private HashMap<GameObject,ImageView> gameObjectImageViewMap=new HashMap<GameObject,ImageView>();
+    private ArrayList<ImageView> gravityNodes=new ArrayList<ImageView>();
     
     public GameSessionView(GameSession gameSession)
     {
@@ -41,13 +53,12 @@ public class GameSessionView extends GridPane{
     private void populateContent()
     {
         grid.getChildren().clear();
-        int height=gameSession.getHeight();
-        int width=gameSession.getWidth();
+        height=gameSession.getHeight();
+        width=gameSession.getWidth();
         
-        int i=0,j=0;
-        for(i=0;i<height;i++)
+        for(int i=0;i<height;i++)
         {
-            for(j=0;j<width;j++)
+            for(int j=0;j<width;j++)
             {                
                 ImageView imageView = new ImageView();
                 GameObject gameObject=gameSession.getGameObjectAt(i, j);
@@ -55,9 +66,16 @@ public class GameSessionView extends GridPane{
                 if(gameObject!=null)
                 {
                     imageView.setImage(gameSession.getGameObjectAt(i, j).getImage());
+                    //csak test
+                    if(gameObject instanceof Alkoholista || gameObject instanceof NemAlkoholista)
+                    {
+                        gravityNodes.add(imageView);
+                    }
                 }
-                
                 grid.add(imageView,j,i);
+               // imageView.setX(i*50);
+               // imageView.setY(j*50);
+                gameObjectImageViewMap.put(gameObject, imageView);
             }
         }
         Image imageRotLeft=new Image("/img/rotLeft.png");
@@ -78,6 +96,22 @@ public class GameSessionView extends GridPane{
                 rt.setToAngle(toAngel);
                 rt.setCycleCount(1);
                 rt.play();
+                
+                switch(gravitacioIranya)
+                {
+                    case Fel:
+                        gravitacioIranya=gravitacioIranya.Ballra;
+                        break;
+                    case Le:
+                        gravitacioIranya=gravitacioIranya.Jobbra;
+                        break;
+                    case Jobbra:
+                        gravitacioIranya=gravitacioIranya.Le;
+                        break;
+                    case Ballra:
+                        gravitacioIranya=gravitacioIranya.Fel;
+                        break;
+                }
             }
         });
         
@@ -92,6 +126,22 @@ public class GameSessionView extends GridPane{
                 rt.setToAngle(toAngel);
                 rt.setCycleCount(1);
                 rt.play();
+                
+                switch(gravitacioIranya)
+                {
+                    case Fel:
+                        gravitacioIranya=gravitacioIranya.Jobbra;
+                        break;
+                    case Le:
+                        gravitacioIranya=gravitacioIranya.Ballra;
+                        break;
+                    case Jobbra:
+                        gravitacioIranya=gravitacioIranya.Fel;
+                        break;
+                    case Ballra:
+                        gravitacioIranya=gravitacioIranya.Le;
+                        break;
+                }
             }
         });
         
@@ -103,14 +153,54 @@ public class GameSessionView extends GridPane{
         grid.setPadding(new Insets(10, 10, 10, 10));
         this.add(grid,0,0);
         this.add(hb,0,1);
-       // grid.getChildren().
         rt.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent ae) {
+            public void handle(ActionEvent event) {
                 
+                for(int i=0;i<height;i++)
+                {
+                    for(int j=0;j<width;j++)
+                    {                
+                        GameObject gameObject=gameSession.getGameObjectAt(i, j);
+                        
+                        if(gameObject instanceof Alkoholista 
+                            || gameObject instanceof NemAlkoholista)
+                           // || gameObject instanceof VasLada
+                           // || gameObject instanceof Tuske
+                           // || gameObject instanceof Bomba)
+                        {
+                            GameObject nextObject=gameSession.getGameObjectAt(gameObject.getNextI(gravitacioIranya),gameObject.getNextJ(gravitacioIranya));
+                            double nextX=gameObjectImageViewMap.get(nextObject).getLayoutX();
+                            double nextY=gameObjectImageViewMap.get(nextObject).getLayoutY();
+                            
+                            ImageView currentImageView=gameObjectImageViewMap.get(gameObject);
+                            TranslateTransition tt = new TranslateTransition(Duration.millis(2000),currentImageView );
+                            if(gravitacioIranya==Enums.GravitacioIranya.Ballra || gravitacioIranya==Enums.GravitacioIranya.Jobbra)
+                            {
+                                tt.setFromX(currentImageView.getLayoutX());
+                                tt.setToX(nextX);
+                            }else
+                            {
+                                tt.setFromY(currentImageView.getLayoutY());
+                                tt.setToY(nextY);
+                            }
+                            
+                            tt.setCycleCount(1);
+                            tt.play();
+                            
+                            gameObject.simulateNextStep(gravitacioIranya);
+                            
+                            /* TranslateTransition tt2 = new TranslateTransition(Duration.millis(2000),currentImageView );
+                            tt2.setFromX(currentImageView.getY());
+                            tt2.setToX(nextY);
+                            tt2.setCycleCount(1);
+                            tt2.play();*/
+                        }
+                    }
+                }
                // populateContent();
-              //  for(ImageView imageNode:gravityNodes)
-               // {
+               for(ImageView imageNode:gravityNodes)
+                {
                     /*TranslateTransition tt = new TranslateTransition(Duration.millis(2000), imageNode);
                     tt.setFromX(imageNode.getX());
                     tt.setToX(imageNode.getX()+100);
@@ -127,7 +217,7 @@ public class GameSessionView extends GridPane{
                   //  tt.setCycleCount(4);
                   //  tt.setAutoReverse(true);
                   //  tt.play(); 
-               // }             
+                }             
             }
         });
 

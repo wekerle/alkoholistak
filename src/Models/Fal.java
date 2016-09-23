@@ -23,13 +23,8 @@ public class Fal extends GameObject
     }
 
     @Override
-    public void getCurrentX() 
+    public int getCurrentX() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void getPreviusX() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -38,5 +33,9 @@ public class Fal extends GameObject
     {
         return image;
     }
-    
+
+    @Override
+    public int getCurrentY() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }    
 }

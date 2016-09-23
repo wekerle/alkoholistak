@@ -7,7 +7,6 @@ package ViewModels;
 
 import Listener.LevelClickEventListener;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;

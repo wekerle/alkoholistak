@@ -33,10 +33,7 @@ public class GameSession
                 //e -bomba
                 //f -tuskek
                 
-                GameObject gameObject=null;
-                gameObject.setX(i);
-                gameObject.setY(j);
-                
+                GameObject gameObject=null;                
                 switch(matrix[i][j])
                 {
                     case '#':
@@ -60,8 +57,14 @@ public class GameSession
                     case 'f':
                         gameObject=new Tuske();
                         break;
+                    case ' ':
+                        gameObject=new Levego();
+                        break;
                 }
                 objects[i][j]=gameObject;
+                gameObject.setGameSession(this);
+                gameObject.setIPos(i);
+                gameObject.setJPos(j);
             }
         }
     }
@@ -80,5 +83,4 @@ public class GameSession
     {
         return objects[x][y];
     }
-
 }

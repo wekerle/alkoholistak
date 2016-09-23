@@ -18,16 +18,11 @@ public class Tuske extends GameObject
 
     @Override
     public void simulateNextStep(Enums.GravitacioIranya gravitacioIrany) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
-    public void getCurrentX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void getPreviusX() {
+    public int getCurrentX() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -36,5 +31,9 @@ public class Tuske extends GameObject
     {
         return image;
     }
-    
+
+    @Override
+    public int getCurrentY() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }    
 }

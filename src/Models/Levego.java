@@ -12,10 +12,8 @@ import javafx.scene.image.Image;
  *
  * @author Ronaldo
  */
-public class VasLada extends GameObject
+public class Levego extends GameObject
 {
-    private Image image=new Image("/img/metalBox.jpg");
-    
     @Override
     public void simulateNextStep(Enums.GravitacioIranya gravitacioIrany) 
     {
@@ -30,11 +28,11 @@ public class VasLada extends GameObject
     @Override
     public Image getImage() 
     {
-        return image;
+        return null;
     }
 
     @Override
     public int getCurrentY() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
+    }
 }

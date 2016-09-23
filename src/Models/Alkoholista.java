@@ -19,29 +19,38 @@ public class Alkoholista extends GameObject
     @Override
     public void simulateNextStep(Enums.GravitacioIranya gravitacioIrany) 
     {
-        switch(gravitacioIrany)
-        {
-            case Fel:
-                break;
-            case Le:
-                
-                break;
-            case Jobbra:
-                break;
-            case Ballra:
-                break;
-        }
+        GameObject neighBor=null;
+       // int neighborX=x,neighborY=y;
+       // while(true)
+       // {
+           // neighBor=getNeighbor(gravitacioIrany,neighborX,neighborY);
+            if(neighBor!=null)
+            {
+                return;
+            }
+            
+            switch(gravitacioIrany)
+            {
+                case Fel:
+                    //neighborX++;
+                    break;
+                case Le:
+                   // neighborX--;
+                    break;
+                case Jobbra:
+                   // neighborY++;
+                    break;
+                case Ballra:
+                   // neighborY--;
+                    break;
+            }
+       // }
     }
 
     @Override
-    public void getCurrentX() 
+    public int getCurrentX() 
     {
-       
-    }
-
-    @Override
-    public void getPreviusX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return 0;
     }
 
     @Override
@@ -49,5 +58,10 @@ public class Alkoholista extends GameObject
     {
         return image;
     }
-    
+
+    @Override
+    public int getCurrentY() 
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }    
 }

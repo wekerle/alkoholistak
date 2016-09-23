@@ -2,7 +2,6 @@ package Models;
 
 
 import Helpers.Enums;
-import Models.GameSession;
 import javafx.scene.image.Image;
 
 /*
@@ -18,47 +17,126 @@ import javafx.scene.image.Image;
 public abstract class GameObject 
 {
     protected GameSession gameSession=null;
-    private int x,y;
+    protected int iPos,jPos;
 
     public void setGameSession(GameSession gameSession) 
     {
         this.gameSession = gameSession;
     }
 
-    public void setX(int x) 
+    public void setIPos(int i) 
     {
-        this.x = x;
+        this.iPos = i;
     }
 
-    public void setY(int y) 
+    public void setJPos(int j) 
     {
-        this.y = y;
+        this.jPos = j;
     }
     
     public abstract void simulateNextStep(Enums.GravitacioIranya gravitacioIrany);
-    public abstract void getCurrentX();
-    public abstract void getPreviusX();
+    public abstract int getCurrentX();
+    public abstract int getCurrentY();
     public abstract Image getImage();
     
-    protected GameObject getNeighbor(Enums.GravitacioIranya gravitacioIrany)
-    {
-        int neighborX=x,neighborY=y;
-        
+    protected GameObject getNeighbor(Enums.GravitacioIranya gravitacioIrany,int x,int y)
+    {       
         switch(gravitacioIrany)
         {
             case Fel:
-                neighborX++;
+                x++;
                 break;
             case Le:
-                neighborX--;
+                x--;
                 break;
             case Jobbra:
-                neighborY++;
+                y++;
                 break;
             case Ballra:
-                neighborY--;
+                y--;
                 break;
         }
-        return gameSession.getGameObjectAt(neighborX,neighborY);
+        return gameSession.getGameObjectAt(x,y);
+    }
+    
+    public int getNextI(Enums.GravitacioIranya gravitacioIranya) 
+    {
+        int nextI=-1;
+        int tempI=iPos;
+        GameObject neighbor=null;
+        while(nextI==-1)
+        {            
+            switch(gravitacioIranya)
+            {
+                case Jobbra:
+                    nextI=iPos;
+                    break;
+                case Ballra:
+                     nextI=iPos;
+                    break;
+                case Fel:                 
+                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                    if(neighbor instanceof Levego)
+                    {
+                        tempI++;
+                    }else
+                    {
+                        nextI=tempI+1;
+                    }
+                    break;
+                case Le:
+                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                    if(neighbor instanceof Levego)
+                    {
+                        tempI--;
+                    }else
+                    {
+                        nextI=tempI-1;
+                    }
+                    break;
+            }
+        }
+        return nextI;
+    }
+
+    public int getNextJ(Enums.GravitacioIranya gravitacioIranya)
+    {
+        int nextJ=-1;
+        int tempJ=jPos;
+        GameObject neighbor=null;
+        while(nextJ==-1)
+        {            
+            switch(gravitacioIranya)
+            {
+                case Fel:
+                    nextJ=jPos;
+                    break;
+                case Le:
+                     nextJ=jPos;
+                    break;
+                case Jobbra:                 
+                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                    if(neighbor instanceof Levego)
+                    {
+                        tempJ++;                       
+                    }else
+                    {
+                       nextJ=tempJ+1;
+                    }
+                    break;
+                case Ballra:
+                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                    if(neighbor instanceof Levego)
+                    {
+                        tempJ--;
+                        nextJ=tempJ;
+                    }else
+                    {
+                        nextJ=tempJ-1;
+                    }
+                    break;
+            }
+        }
+        return nextJ;
     }
 }
