@@ -5,8 +5,11 @@
         <group>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/GameObject.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/VasLada.java</file>
+            <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Listener/LevelClickEventListener.java</file>
+            <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/NextStepSimulateModel.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/Alkoholista.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Helpers/Enums.java</file>
+            <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/Levego.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Models/Bomba.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/Helpers/StringHelper.java</file>
             <file>file:/C:/Users/Ronaldo/Desktop/alkoholistak/alkoholistak/src/ViewModels/MinimalLevelView.java</file>

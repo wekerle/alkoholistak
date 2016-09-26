@@ -64,9 +64,8 @@ public abstract class GameObject
         this.toY = toY;
     }
     
-    public abstract int getCurrentX();
-    public abstract int getCurrentY();
     public abstract Image getImage();
+    public abstract boolean canFall();
     
     protected GameObject getNeighbor(Enums.GravitacioIranya gravitacioIrany,int i,int j)
     {       
@@ -86,82 +85,6 @@ public abstract class GameObject
                 break;
         }
         return gameSession.getGameObjectAt(i,j);
-    }
-    
-    public int getNextI(Enums.GravitacioIranya gravitacioIranya,int iPos,int jPos) 
-    {
-        int nextI=-1;
-        int tempI=iPos;
-        GameObject neighbor=null;
-        while(nextI==-1)
-        {            
-            switch(gravitacioIranya)
-            {
-                case Jobbra:
-                case Ballra:
-                     nextI=iPos;
-                    break;
-                case Fel:                 
-                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
-                    if(neighbor instanceof Levego)
-                    {
-                        tempI++;
-                    }else
-                    {
-                        nextI=tempI;
-                    }
-                    break;
-                case Le:
-                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
-                    if(neighbor instanceof Levego)
-                    {
-                        tempI--;
-                    }else
-                    {
-                        nextI=tempI;
-                    }
-                    break;
-            }
-        }
-        return nextI;
-    }
-
-    public int getNextJ(Enums.GravitacioIranya gravitacioIranya, int iPos, int jPos)
-    {
-        int nextJ=-1;
-        int tempJ=jPos;
-        GameObject neighbor=null;
-        while(nextJ==-1)
-        {            
-            switch(gravitacioIranya)
-            {
-                case Fel:
-                case Le:
-                     nextJ=jPos;
-                    break;
-                case Jobbra:                 
-                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
-                    if(neighbor instanceof Levego)
-                    {
-                        tempJ++;                       
-                    }else
-                    {
-                       nextJ=tempJ;
-                    }
-                    break;
-                case Ballra:
-                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
-                    if(neighbor instanceof Levego)
-                    {
-                        tempJ--;
-                    }else
-                    {
-                        nextJ=tempJ;
-                    }
-                    break;
-            }
-        }
-        return nextJ;
     }
     
     public int getNumberOfStepsI(Enums.GravitacioIranya gravitacioIranya, int iPos, int jPos) 

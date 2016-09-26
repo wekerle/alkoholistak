@@ -5,7 +5,6 @@
  */
 package Models;
 
-import Helpers.Enums;
 import javafx.scene.image.Image;
 
 /**
@@ -15,18 +14,14 @@ import javafx.scene.image.Image;
 public class Levego extends GameObject
 {
     @Override
-    public int getCurrentX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Image getImage() 
     {
         return null;
     }
-
+    
     @Override
-    public int getCurrentY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean canFall() 
+    {
+       return false;
     }
 }

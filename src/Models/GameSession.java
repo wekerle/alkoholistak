@@ -1,5 +1,6 @@
 package Models;
 
+import Helpers.Enums;
 import java.util.ArrayList;
 
 /*
@@ -113,5 +114,23 @@ public class GameSession
         {
             simulateNextStep(nextStep.getI(),nextStep.getJ(),nextStep.getNumberOfStepsI(),nextStep.getNumberOfStepsJ());
         }
+    }
+    
+    public boolean hasObjectWichCanFall(Enums.GravitacioIranya gravitacioIrany)
+    {
+        boolean result=false;
+        for(int i=0;i<objects.length;i++)
+        {
+            for(int j=0;j<objects[0].length;j++)
+            {
+                if(objects[i][j].canFall() && objects[i][j].getNeighbor(gravitacioIrany, i, j) instanceof Levego)
+                {
+                    result=true;
+                    break;
+                }
+            }
+        }
+            
+        return result;
     }
 }

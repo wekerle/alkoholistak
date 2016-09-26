@@ -5,7 +5,6 @@
  */
 package Models;
 
-import Helpers.Enums;
 import javafx.scene.image.Image;
 
 /**
@@ -17,18 +16,14 @@ public class NemAlkoholista extends GameObject
     private Image image=new Image("/img/people.png");
 
     @Override
-    public int getCurrentX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Image getImage() 
     {
         return image;
     }
-
+    
     @Override
-    public int getCurrentY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
+    public boolean canFall() 
+    {
+       return true;
+    }
 }

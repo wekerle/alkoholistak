@@ -165,49 +165,48 @@ public class GameSessionView extends GridPane{
         rt.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                    
-                for(int i=0;i<height;i++)
+                
+                while(gameSession.hasObjectWichCanFall(gravitacioIranya))
                 {
-                    for(int j=0;j<width;j++)
-                    {                
-                        GameObject gameObject=gameSession.getGameObjectAt(i, j);
-                        if(gameObject instanceof Alkoholista 
-                            || gameObject instanceof NemAlkoholista
-                            || gameObject instanceof VasLada
-                            || gameObject instanceof Tuske
-                            || gameObject instanceof Bomba)
-                        {
-                        
-                            ImageView currentImageView=gameObjectImageViewMap.get(gameObject);
-                            TranslateTransition tt = new TranslateTransition(Duration.millis(1000),currentImageView );
+                    for(int i=0;i<height;i++)
+                    {
+                        for(int j=0;j<width;j++)
+                        {                
+                            GameObject gameObject=gameSession.getGameObjectAt(i, j);
+                            if(gameObject.canFall())
+                            {                        
+                                ImageView currentImageView=gameObjectImageViewMap.get(gameObject);
+                                TranslateTransition tt = new TranslateTransition(Duration.millis(1000),currentImageView );
 
-                            int numberOfStepsI=gameObject.getNumberOfStepsI(gravitacioIranya,i,j);
-                            int numberOfStepsJ=gameObject.getNumberOfStepsJ(gravitacioIranya,i,j);
-                            
-                            if(numberOfStepsJ !=0 && (gravitacioIranya==Enums.GravitacioIranya.Ballra || gravitacioIranya==Enums.GravitacioIranya.Jobbra))
-                            {
-                                gameObject.setToX(gameObject.getFromX()+numberOfStepsJ*50);
-                                tt.setFromX(gameObject.getFromX());
-                                tt.setToX(gameObject.getToX());
-                                gameObject.setFromX(gameObject.getToX());
-                            }else if(numberOfStepsI !=0 && (gravitacioIranya==Enums.GravitacioIranya.Fel || gravitacioIranya==Enums.GravitacioIranya.Le))
-                            {
-                                gameObject.setToY(gameObject.getFromY()+numberOfStepsI*50);
-                                tt.setFromY(gameObject.getFromY());
-                                tt.setToY(gameObject.getToY());
-                                gameObject.setFromY(gameObject.getToY());
+                                int numberOfStepsI=gameObject.getNumberOfStepsI(gravitacioIranya,i,j);
+                                int numberOfStepsJ=gameObject.getNumberOfStepsJ(gravitacioIranya,i,j);
+
+                                if(numberOfStepsJ !=0 && (gravitacioIranya==Enums.GravitacioIranya.Ballra || gravitacioIranya==Enums.GravitacioIranya.Jobbra))
+                                {
+                                    gameObject.setToX(gameObject.getFromX()+numberOfStepsJ*50);
+                                    tt.setFromX(gameObject.getFromX());
+                                    tt.setToX(gameObject.getToX());
+                                    gameObject.setFromX(gameObject.getToX());
+                                }else if(numberOfStepsI !=0 && (gravitacioIranya==Enums.GravitacioIranya.Fel || gravitacioIranya==Enums.GravitacioIranya.Le))
+                                {
+                                    gameObject.setToY(gameObject.getFromY()+numberOfStepsI*50);
+                                    tt.setFromY(gameObject.getFromY());
+                                    tt.setToY(gameObject.getToY());
+                                    gameObject.setFromY(gameObject.getToY());
+                                }
+
+                                    tt.setCycleCount(1);
+                                    tt.play();
+
+                                gameSession.addNextStepSimulateModel(new NextStepSimulateModel(i, j, numberOfStepsI, numberOfStepsJ));
                             }
-
-                                tt.setCycleCount(1);
-                                tt.play();
-                                
-                            gameSession.addNextStepSimulateModel(new NextStepSimulateModel(i, j, numberOfStepsI, numberOfStepsJ));
                         }
                     }
+
+                    gameSession.simulateNextStep();
+                    gameSession.clearNextStepSimulateModel();
                 }
                 
-                gameSession.simulateNextStep();
-                gameSession.clearNextStepSimulateModel();
                 buttonRotLeft.setDisable(false);
                 buttonRotRight.setDisable(false);
             }
