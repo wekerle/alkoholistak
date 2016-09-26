@@ -110,10 +110,10 @@ public class GameSessionView extends GridPane{
                         gravitacioIranya=gravitacioIranya.Jobbra;
                         break;
                     case Jobbra:
-                        gravitacioIranya=gravitacioIranya.Le;
+                        gravitacioIranya=gravitacioIranya.Fel;
                         break;
                     case Ballra:
-                        gravitacioIranya=gravitacioIranya.Fel;
+                        gravitacioIranya=gravitacioIranya.Le;
                         break;
                 } 
                 
@@ -142,10 +142,10 @@ public class GameSessionView extends GridPane{
                         gravitacioIranya=gravitacioIranya.Ballra;
                         break;
                     case Jobbra:
-                        gravitacioIranya=gravitacioIranya.Fel;
+                        gravitacioIranya=gravitacioIranya.Le;
                         break;
                     case Ballra:
-                        gravitacioIranya=gravitacioIranya.Le;
+                        gravitacioIranya=gravitacioIranya.Fel;
                         break;
                 }
                 buttonRotLeft.setDisable(true);
@@ -183,16 +183,16 @@ public class GameSessionView extends GridPane{
 
                             int numberOfStepsI=gameObject.getNumberOfStepsI(gravitacioIranya,i,j);
                             int numberOfStepsJ=gameObject.getNumberOfStepsJ(gravitacioIranya,i,j);
-
-                            gameObject.setToX(numberOfStepsJ*50);
-                            gameObject.setToY(numberOfStepsI*50);
-                            if(gravitacioIranya==Enums.GravitacioIranya.Ballra || gravitacioIranya==Enums.GravitacioIranya.Jobbra)
+                            
+                            if(numberOfStepsJ !=0 && (gravitacioIranya==Enums.GravitacioIranya.Ballra || gravitacioIranya==Enums.GravitacioIranya.Jobbra))
                             {
+                                gameObject.setToX(gameObject.getFromX()+numberOfStepsJ*50);
                                 tt.setFromX(gameObject.getFromX());
                                 tt.setToX(gameObject.getToX());
                                 gameObject.setFromX(gameObject.getToX());
-                            }else
+                            }else if(numberOfStepsI !=0 && (gravitacioIranya==Enums.GravitacioIranya.Fel || gravitacioIranya==Enums.GravitacioIranya.Le))
                             {
+                                gameObject.setToY(gameObject.getFromY()+numberOfStepsI*50);
                                 tt.setFromY(gameObject.getFromY());
                                 tt.setToY(gameObject.getToY());
                                 gameObject.setFromY(gameObject.getToY());

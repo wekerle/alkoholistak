@@ -68,24 +68,24 @@ public abstract class GameObject
     public abstract int getCurrentY();
     public abstract Image getImage();
     
-    protected GameObject getNeighbor(Enums.GravitacioIranya gravitacioIrany,int x,int y)
+    protected GameObject getNeighbor(Enums.GravitacioIranya gravitacioIrany,int i,int j)
     {       
         switch(gravitacioIrany)
         {
             case Fel:
-                x++;
+                i--;
                 break;
             case Le:
-                x--;
+                i++;
                 break;
             case Jobbra:
-                y++;
+                j++;
                 break;
             case Ballra:
-                y--;
+                j--;
                 break;
         }
-        return gameSession.getGameObjectAt(x,y);
+        return gameSession.getGameObjectAt(i,j);
     }
     
     public int getNextI(Enums.GravitacioIranya gravitacioIranya,int iPos,int jPos) 
@@ -179,8 +179,8 @@ public abstract class GameObject
                 neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
                 while(neighbor instanceof Levego)
                 {
-                    tempI++;
-                    numberOfSteps++;
+                    tempI--;
+                    numberOfSteps--;
                     neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
                 }
                 break;
@@ -188,8 +188,8 @@ public abstract class GameObject
                 neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
                 while(neighbor instanceof Levego)
                 {
-                    tempI--;
-                    numberOfSteps--;
+                    tempI++;
+                    numberOfSteps++;
                     neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
                 }
                 break;
