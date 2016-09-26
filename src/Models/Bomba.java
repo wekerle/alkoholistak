@@ -15,12 +15,7 @@ import javafx.scene.image.Image;
 public class Bomba extends GameObject
 {
     private Image image=new Image("/img/bomb.png");
-
-    @Override
-    public void simulateNextStep(Enums.GravitacioIranya gravitacioIrany) {
-       
-    }
-
+    
     @Override
     public int getCurrentX() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

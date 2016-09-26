@@ -15,12 +15,6 @@ import javafx.scene.image.Image;
 public class VasLada extends GameObject
 {
     private Image image=new Image("/img/metalBox.jpg");
-    
-    @Override
-    public void simulateNextStep(Enums.GravitacioIranya gravitacioIrany) 
-    {
-        
-    }
 
     @Override
     public int getCurrentX() {

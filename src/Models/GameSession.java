@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,6 +15,7 @@ package Models;
 public class GameSession 
 {
     private GameObject[][] objects=null;
+    private ArrayList<NextStepSimulateModel> nextSteps =new ArrayList<NextStepSimulateModel>();
     public GameSession(LevelModel level)
     {
         char[][] matrix=level.getMatrix();
@@ -63,8 +66,6 @@ public class GameSession
                 }
                 objects[i][j]=gameObject;
                 gameObject.setGameSession(this);
-                gameObject.setIPos(i);
-                gameObject.setJPos(j);
             }
         }
     }
@@ -82,5 +83,35 @@ public class GameSession
     public GameObject getGameObjectAt(int x,int y)
     {
         return objects[x][y];
+    }
+    
+    private void simulateNextStep(int i,int j,int numberStepsI,int numberStepsJ)
+    {
+        if(numberStepsI==0 && numberStepsJ==0)
+        {
+            return;
+        }
+
+        GameObject temp=objects[i][j];
+        objects[i][j]=objects[i+numberStepsI][j+numberStepsJ];
+        objects[i+numberStepsI][j+numberStepsJ]=temp;
+    }
+    
+    public void addNextStepSimulateModel(NextStepSimulateModel nextStep)
+    {
+        nextSteps.add(nextStep);
+    }
+    
+    public void clearNextStepSimulateModel()
+    {
+        nextSteps.clear();
+    }
+    
+    public void simulateNextStep()
+    {
+        for(NextStepSimulateModel nextStep : nextSteps)
+        {
+            simulateNextStep(nextStep.getI(),nextStep.getJ(),nextStep.getNumberOfStepsI(),nextStep.getNumberOfStepsJ());
+        }
     }
 }

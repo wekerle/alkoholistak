@@ -17,24 +17,53 @@ import javafx.scene.image.Image;
 public abstract class GameObject 
 {
     protected GameSession gameSession=null;
-    protected int iPos,jPos;
+    protected int fromX,toX,fromY,toY;
 
     public void setGameSession(GameSession gameSession) 
     {
         this.gameSession = gameSession;
     }
 
-    public void setIPos(int i) 
+    public int getFromX() 
     {
-        this.iPos = i;
+        return fromX;
     }
 
-    public void setJPos(int j) 
+    public void setFromX(int fromX) 
     {
-        this.jPos = j;
+        this.fromX = fromX;
+    }
+
+    public int getToX() 
+    {
+        return toX;
+    }
+
+    public void setToX(int toX) 
+    {
+        this.toX = toX;
+    }
+
+    public int getFromY() 
+    {
+        return fromY;
+    }
+
+    public void setFromY(int fromY) 
+    {
+        this.fromY = fromY;
+    }
+
+    public int getToY() 
+    {
+        return toY;
+    }
+
+    public void setToY(int toY) 
+    {
+        this.toY = toY;
     }
     
-    public abstract void simulateNextStep(Enums.GravitacioIranya gravitacioIrany);
     public abstract int getCurrentX();
     public abstract int getCurrentY();
     public abstract Image getImage();
@@ -59,7 +88,7 @@ public abstract class GameObject
         return gameSession.getGameObjectAt(x,y);
     }
     
-    public int getNextI(Enums.GravitacioIranya gravitacioIranya) 
+    public int getNextI(Enums.GravitacioIranya gravitacioIranya,int iPos,int jPos) 
     {
         int nextI=-1;
         int tempI=iPos;
@@ -69,8 +98,6 @@ public abstract class GameObject
             switch(gravitacioIranya)
             {
                 case Jobbra:
-                    nextI=iPos;
-                    break;
                 case Ballra:
                      nextI=iPos;
                     break;
@@ -81,7 +108,7 @@ public abstract class GameObject
                         tempI++;
                     }else
                     {
-                        nextI=tempI+1;
+                        nextI=tempI;
                     }
                     break;
                 case Le:
@@ -91,7 +118,7 @@ public abstract class GameObject
                         tempI--;
                     }else
                     {
-                        nextI=tempI-1;
+                        nextI=tempI;
                     }
                     break;
             }
@@ -99,7 +126,7 @@ public abstract class GameObject
         return nextI;
     }
 
-    public int getNextJ(Enums.GravitacioIranya gravitacioIranya)
+    public int getNextJ(Enums.GravitacioIranya gravitacioIranya, int iPos, int jPos)
     {
         int nextJ=-1;
         int tempJ=jPos;
@@ -109,8 +136,6 @@ public abstract class GameObject
             switch(gravitacioIranya)
             {
                 case Fel:
-                    nextJ=jPos;
-                    break;
                 case Le:
                      nextJ=jPos;
                     break;
@@ -121,7 +146,7 @@ public abstract class GameObject
                         tempJ++;                       
                     }else
                     {
-                       nextJ=tempJ+1;
+                       nextJ=tempJ;
                     }
                     break;
                 case Ballra:
@@ -129,14 +154,79 @@ public abstract class GameObject
                     if(neighbor instanceof Levego)
                     {
                         tempJ--;
-                        nextJ=tempJ;
                     }else
                     {
-                        nextJ=tempJ-1;
+                        nextJ=tempJ;
                     }
                     break;
             }
         }
         return nextJ;
     }
+    
+    public int getNumberOfStepsI(Enums.GravitacioIranya gravitacioIranya, int iPos, int jPos) 
+    {
+        int tempI=iPos;
+        int numberOfSteps=0;
+        GameObject neighbor=null;
+        
+        switch(gravitacioIranya)
+        {
+            case Jobbra:
+            case Ballra:
+                break;
+            case Fel:                 
+                neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                while(neighbor instanceof Levego)
+                {
+                    tempI++;
+                    numberOfSteps++;
+                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                }
+                break;
+            case Le:
+                neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                while(neighbor instanceof Levego)
+                {
+                    tempI--;
+                    numberOfSteps--;
+                    neighbor=getNeighbor(gravitacioIranya, tempI, jPos);
+                }
+                break;
+        }
+        return numberOfSteps;
+    }
+
+    public int getNumberOfStepsJ(Enums.GravitacioIranya gravitacioIranya, int iPos, int jPos)
+    {
+        int tempJ=jPos;
+        int numberOfSteps=0;
+        GameObject neighbor=null;
+        
+        switch(gravitacioIranya)
+        {
+            case Fel:
+            case Le:
+                break;
+            case Jobbra:                 
+                neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                while(neighbor instanceof Levego)
+                {
+                    tempJ++;
+                    numberOfSteps++;
+                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                }
+                break;
+            case Ballra:
+                neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                while(neighbor instanceof Levego)
+                {
+                    tempJ--;
+                    numberOfSteps--;
+                    neighbor=getNeighbor(gravitacioIranya, iPos, tempJ);
+                }
+                break;
+        }
+        return numberOfSteps;
+    }    
 }
