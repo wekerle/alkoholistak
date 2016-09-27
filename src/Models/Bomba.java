@@ -13,7 +13,8 @@ import javafx.scene.image.Image;
  */
 public class Bomba extends GameObject
 {
-    private Image image=new Image("/img/bomb.png");
+   // private Image image=new Image("/img/bomb.png");
+    private Image image=new Image("/img/explosion.gif-c200");
 
     @Override
     public Image getImage() 

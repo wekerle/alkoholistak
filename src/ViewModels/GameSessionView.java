@@ -6,14 +6,9 @@
 package ViewModels;
 
 import Helpers.Enums;
-import Models.Alkoholista;
-import Models.Bomba;
 import Models.GameObject;
 import Models.GameSession;
-import Models.NemAlkoholista;
 import Models.NextStepSimulateModel;
-import Models.Tuske;
-import Models.VasLada;
 import java.util.HashMap;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -27,14 +22,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
  *
  * @author tibor.wekerle
  */
-public class GameSessionView extends GridPane{
+public class GameSessionView extends HBox{
     private GridPane grid=new GridPane();
+    private VBox vbox=new VBox();
     private RotateTransition rt = new RotateTransition(Duration.millis(500), GameSessionView.this.grid);
     private int fromAngel=0,toAngel = 0,height=0,width;
     private GameSession gameSession=null;
@@ -159,9 +159,22 @@ public class GameSessionView extends GridPane{
         hb.getChildren().add(buttonTeszt);
         
         hb.setAlignment(Pos.CENTER);
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        this.add(grid,0,0);
-        this.add(hb,0,1);
+        hb.setPadding(new Insets(55, 10, 10, 10));
+       
+        vbox.getChildren().add(grid);
+        vbox.getChildren().add(hb);
+        vbox.setAlignment(Pos.CENTER);
+        
+        Text text=new Text("Nivelul: "+ gameSession.getLevelNumber());
+        text.setFont(Font.font("TimesNewRoman",FontWeight.BOLD,32));
+        VBox textVB= new VBox();
+        textVB.getChildren().add(text);
+        textVB.setAlignment(Pos.TOP_LEFT); 
+        textVB.setPadding(new Insets(25, 75, 50, 25));
+        
+        this.getChildren().add(textVB);       
+        this.getChildren().add(vbox);
+        
         rt.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

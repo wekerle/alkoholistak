@@ -17,8 +17,16 @@ public class GameSession
 {
     private GameObject[][] objects=null;
     private ArrayList<NextStepSimulateModel> nextSteps =new ArrayList<NextStepSimulateModel>();
+    private int levelNumber;
+
+    public int getLevelNumber() 
+    {
+        return levelNumber;
+    }
+    
     public GameSession(LevelModel level)
     {
+        this.levelNumber=level.getLevelNumber();
         char[][] matrix=level.getMatrix();
         int height=matrix.length;
         int width=matrix[0].length;
@@ -126,6 +134,24 @@ public class GameSession
                 if(objects[i][j].canFall() && objects[i][j].getNeighbor(gravitacioIrany, i, j) instanceof Levego)
                 {
                     result=true;
+                    break;
+                }
+            }
+        }
+            
+        return result;
+    }
+    
+    public boolean win()
+    {
+        boolean result=true;
+        for(int i=0;i<objects.length;i++)
+        {
+            for(int j=0;j<objects[0].length;j++)
+            {
+                if(objects[i][j] instanceof NemAlkoholista)
+                {
+                    result=false;
                     break;
                 }
             }

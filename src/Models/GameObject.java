@@ -2,6 +2,7 @@ package Models;
 
 
 import Helpers.Enums;
+import java.util.ArrayList;
 import javafx.scene.image.Image;
 
 /*
@@ -151,5 +152,19 @@ public abstract class GameObject
                 break;
         }
         return numberOfSteps;
-    }    
+    }
+
+    public ArrayList<GameObject> getMainNeighbors(int i,int j)
+    {
+        ArrayList<GameObject> result=new ArrayList<GameObject>();
+        
+        return result;
+    }
+    
+    public ArrayList<GameObject> getAllNeighbors()
+    {
+        ArrayList<GameObject> result=new ArrayList<GameObject>();
+        
+        return result;
+    }
 }
