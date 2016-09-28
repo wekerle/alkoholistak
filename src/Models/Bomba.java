@@ -5,6 +5,7 @@
  */
 package Models;
 
+import java.util.ArrayList;
 import javafx.scene.image.Image;
 
 /**
@@ -13,8 +14,7 @@ import javafx.scene.image.Image;
  */
 public class Bomba extends GameObject
 {
-   // private Image image=new Image("/img/bomb.png");
-    private Image image=new Image("/img/explosion.gif-c200");
+   private Image image=new Image("/img/bomb.png");
 
     @Override
     public Image getImage() 

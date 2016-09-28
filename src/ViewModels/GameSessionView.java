@@ -5,10 +5,17 @@
  */
 package ViewModels;
 
+import Animation.AnimatedGif;
+import Animation.Animation;
 import Helpers.Enums;
+import Models.Alkoholista;
+import Models.Bomba;
+import Models.FaLada;
 import Models.GameObject;
 import Models.GameSession;
+import Models.NemAlkoholista;
 import Models.NextStepSimulateModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -38,13 +45,42 @@ public class GameSessionView extends HBox{
     private RotateTransition rt = new RotateTransition(Duration.millis(500), GameSessionView.this.grid);
     private int fromAngel=0,toAngel = 0,height=0,width;
     private GameSession gameSession=null;
+    private GameSession originalGameSession=null;
     Enums.GravitacioIranya gravitacioIranya=Enums.GravitacioIranya.Le;
     private HashMap<GameObject,ImageView> gameObjectImageViewMap=new HashMap<GameObject,ImageView>();
     
     public GameSessionView(GameSession gameSession)
     {
         this.gameSession=gameSession;
+       // this.originalGameSession=(GameSession)gameSession.clone();
         populateContent();
+    }
+    
+    private void BombExplod(Bomba bomb)
+    {
+        Animation ani = new AnimatedGif("src/img/newExp3.gif", 1000);
+        ani.setCycleCount(1);       
+        grid.add(ani.getView(), bomb.getCurrentJ(), bomb.getCurrentI());
+        
+        grid.getChildren().remove(gameObjectImageViewMap.get(bomb));
+        gameSession.deleteObject(bomb.getCurrentI(), bomb.getCurrentJ());
+        
+        ArrayList<GameObject> allNeighBors=gameSession.getAllNeighbors(bomb.getCurrentI(), bomb.getCurrentJ());            
+        for(GameObject object :allNeighBors)
+        {
+            if(object instanceof Alkoholista || object instanceof NemAlkoholista || object instanceof FaLada)
+            {
+                grid.getChildren().remove(gameObjectImageViewMap.get(object));
+                gameSession.deleteObject(object.getCurrentI(), object.getCurrentJ());
+                if(object instanceof Alkoholista || object instanceof NemAlkoholista)
+                {
+                     //lose=true;
+                }
+            }
+        }
+        
+        ani.play();
+        
     }
     
     private void populateContent()
@@ -62,28 +98,57 @@ public class GameSessionView extends HBox{
                 if(gameObject!=null)
                 {
                     imageView.setImage(gameSession.getGameObjectAt(i, j).getImage());
+                    
+                    if(gameObject instanceof Bomba)
+                    {
+                        imageView.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent event) {                                                            
+                                GameSessionView.this.BombExplod(((Bomba) gameObject));                             
+                            }
+                        });
+                    }
                 }
                 grid.add(imageView,j,i);
                 gameObjectImageViewMap.put(gameObject, imageView);
             }
         }
+        
         Image imageRotLeft=new Image("/img/rotLeft.png");
         Button buttonRotLeft=new Button();
         buttonRotLeft.setGraphic(new ImageView(imageRotLeft));
-        
+                
         Image imageRotRight=new Image("/img/rotRight.png");
         Button buttonRotRight=new Button();
         buttonRotRight.setGraphic(new ImageView(imageRotRight));
+        
+        Image imageRestart=new Image("/img/restart.png");
+        Button buttonRestart=new Button();
+        buttonRestart.setGraphic(new ImageView(imageRestart));
         
         //ez a gomb csak teszt
         Button buttonTeszt=new Button();
         buttonTeszt.setText("teszt");
         
+        buttonRestart.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event) {
+                grid.getChildren().clear(); 
+                vbox.getChildren().clear(); 
+                GameSessionView.this.getChildren().clear();
+                GameSessionView.this.gameSession=GameSessionView.this.originalGameSession;
+                populateContent();
+            }
+            
+        });
+        
         buttonTeszt.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event) {
-                grid.getChildren().clear();  
+                grid.getChildren().clear(); 
+                vbox.getChildren().clear(); 
                 GameSessionView.this.getChildren().clear();
                 populateContent();
             }
@@ -157,9 +222,10 @@ public class GameSessionView extends HBox{
         hb.getChildren().add(buttonRotLeft);
         hb.getChildren().add(buttonRotRight);
         hb.getChildren().add(buttonTeszt);
-        
+       
         hb.setAlignment(Pos.CENTER);
         hb.setPadding(new Insets(55, 10, 10, 10));
+        hb.setSpacing(20);
        
         vbox.getChildren().add(grid);
         vbox.getChildren().add(hb);
@@ -167,12 +233,15 @@ public class GameSessionView extends HBox{
         
         Text text=new Text("Nivelul: "+ gameSession.getLevelNumber());
         text.setFont(Font.font("TimesNewRoman",FontWeight.BOLD,32));
-        VBox textVB= new VBox();
-        textVB.getChildren().add(text);
-        textVB.setAlignment(Pos.TOP_LEFT); 
-        textVB.setPadding(new Insets(25, 75, 50, 25));
         
-        this.getChildren().add(textVB);       
+        VBox leftVB= new VBox();
+        leftVB.getChildren().add(text);       
+        leftVB.getChildren().add(buttonRestart);
+        leftVB.setAlignment(Pos.TOP_LEFT); 
+        leftVB.setPadding(new Insets(25, 75, 50, 25));
+        leftVB.setSpacing(20);
+        
+        this.getChildren().add(leftVB);       
         this.getChildren().add(vbox);
         
         rt.setOnFinished(new EventHandler<ActionEvent>() {
@@ -200,12 +269,16 @@ public class GameSessionView extends HBox{
                                     tt.setFromX(gameObject.getFromX());
                                     tt.setToX(gameObject.getToX());
                                     gameObject.setFromX(gameObject.getToX());
+                                    
+                                    gameObject.setCurrentJ(gameObject.getCurrentJ()+numberOfStepsJ);
                                 }else if(numberOfStepsI !=0 && (gravitacioIranya==Enums.GravitacioIranya.Fel || gravitacioIranya==Enums.GravitacioIranya.Le))
                                 {
                                     gameObject.setToY(gameObject.getFromY()+numberOfStepsI*50);
                                     tt.setFromY(gameObject.getFromY());
                                     tt.setToY(gameObject.getToY());
                                     gameObject.setFromY(gameObject.getToY());
+                                    
+                                    gameObject.setCurrentI(gameObject.getCurrentI()+numberOfStepsI);
                                 }
 
                                     tt.setCycleCount(1);

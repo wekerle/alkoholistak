@@ -11,10 +11,24 @@ package Helpers;
  */
 public class Enums 
 {
-    public enum GravitacioIranya{
+    public enum GravitacioIranya
+    {
         Fel,
         Le,
         Jobbra,
         Ballra     
+    }
+    
+    public enum PozicioAMatrixBan
+    {
+        FelsoBallSarok,
+        FelsoJobbSarok,
+        AlsoBallSarok,
+        AlsoJobbSarok,
+        FelsoOldal,
+        AlsoOldal,
+        JobbOldal,
+        BallOldal,
+        Kozepen    
     }
 }

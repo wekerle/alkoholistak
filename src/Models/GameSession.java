@@ -18,7 +18,68 @@ public class GameSession
     private GameObject[][] objects=null;
     private ArrayList<NextStepSimulateModel> nextSteps =new ArrayList<NextStepSimulateModel>();
     private int levelNumber;
-
+    private boolean lose=false;
+    
+    private Enums.PozicioAMatrixBan getPoztionInMatrix(int i,int j)
+    {
+        if(i==0)
+        {
+            if(j==0)
+            {
+                return Enums.PozicioAMatrixBan.FelsoBallSarok;
+            }else if(j==objects[0].length)
+            {
+                return Enums.PozicioAMatrixBan.AlsoJobbSarok;
+            }else
+            {
+                return Enums.PozicioAMatrixBan.FelsoOldal;
+            }
+        }else if(i==objects.length)
+        {
+            if(j==0)
+            {
+                return Enums.PozicioAMatrixBan.AlsoBallSarok;
+            }else if(j==objects[0].length)
+            {
+                return Enums.PozicioAMatrixBan.FelsoJobbSarok;
+            }else
+            {
+                return Enums.PozicioAMatrixBan.AlsoOldal;
+            }
+        }else if(j==0)
+        {
+            if(i==0)
+            {
+                return Enums.PozicioAMatrixBan.FelsoBallSarok;
+            }else if(i==objects.length)
+            {
+                return Enums.PozicioAMatrixBan.AlsoBallSarok;
+            }else
+            {
+                return Enums.PozicioAMatrixBan.BallOldal;
+            }
+        }else if(j==objects[0].length)
+        {
+            if(i==0)
+            {
+                return Enums.PozicioAMatrixBan.FelsoJobbSarok;
+            }else if(i==objects.length)
+            {
+                return Enums.PozicioAMatrixBan.AlsoJobbSarok;
+            }else
+            {
+                return Enums.PozicioAMatrixBan.JobbOldal;
+            }
+        }
+        
+        return Enums.PozicioAMatrixBan.Kozepen;
+    }
+    
+    public void deleteObject(int i, int j)
+    {
+        objects[i][j]=new Levego();
+    }
+    
     public int getLevelNumber() 
     {
         return levelNumber;
@@ -74,6 +135,8 @@ public class GameSession
                         break;
                 }
                 objects[i][j]=gameObject;
+                gameObject.currentI=i;
+                gameObject.currentJ=j;
                 gameObject.setGameSession(this);
             }
         }
@@ -158,5 +221,129 @@ public class GameSession
         }
             
         return result;
+    }
+    
+    public ArrayList<GameObject> getMainNeighbors(int i, int j)
+    {
+        ArrayList<GameObject> neighbors=new ArrayList<GameObject>();
+        
+        Enums.PozicioAMatrixBan pozicio=getPoztionInMatrix(i, j);
+        switch(pozicio)
+        {
+            case FelsoBallSarok:
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i+1][j]);
+                break;
+            case FelsoJobbSarok:
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j]);
+                break;
+            case AlsoBallSarok:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                break;
+            case AlsoJobbSarok:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j-1]);
+                break;
+            case BallOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i+1][j]);
+                break;
+            case JobbOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j]);
+                break;
+            case AlsoOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                break;
+            case FelsoOldal:
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                break;
+            case Kozepen:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                break;              
+        }
+        
+        return neighbors;
+    }
+    
+    public ArrayList<GameObject> getAllNeighbors(int i, int j)
+    {
+        ArrayList<GameObject> neighbors=new ArrayList<GameObject>();
+        
+        Enums.PozicioAMatrixBan pozicio=getPoztionInMatrix(i, j);
+        switch(pozicio)
+        {
+            case FelsoBallSarok:
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i+1][j+1]);
+                break;
+            case FelsoJobbSarok:
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i+1][j-1]);
+                break;
+            case AlsoBallSarok:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i-1][j+1]);
+                break;
+            case AlsoJobbSarok:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i-1][j-1]);
+                break;
+            case BallOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i-1][j+1]);
+                neighbors.add(objects[i+1][j+1]);
+                break;
+            case JobbOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i-1][j-1]);
+                neighbors.add(objects[i+1][j-1]);
+                break;
+            case AlsoOldal:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i-1][j-1]);
+                neighbors.add(objects[i-1][j+1]);
+                break;
+            case FelsoOldal:
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j-1]);
+                neighbors.add(objects[i+1][j+1]);
+                break;
+            case Kozepen:
+                neighbors.add(objects[i-1][j]);
+                neighbors.add(objects[i+1][j]);
+                neighbors.add(objects[i][j+1]);
+                neighbors.add(objects[i][j-1]);
+                neighbors.add(objects[i+1][j-1]);
+                neighbors.add(objects[i+1][j+1]);
+                neighbors.add(objects[i-1][j-1]);
+                neighbors.add(objects[i-1][j+1]);
+                break;              
+        }
+        
+        return neighbors;
     }
 }

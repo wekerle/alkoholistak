@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 public abstract class GameObject 
 {
     protected GameSession gameSession=null;
-    protected int fromX,toX,fromY,toY;
+    protected int fromX,toX,fromY,toY,currentI,currentJ;
 
     public void setGameSession(GameSession gameSession) 
     {
@@ -33,6 +33,26 @@ public abstract class GameObject
     public void setFromX(int fromX) 
     {
         this.fromX = fromX;
+    }
+    
+    public int getCurrentI() 
+    {
+        return currentI;
+    }
+
+    public void setCurrentI(int currentI) 
+    {
+        this.currentI = currentI;
+    }
+    
+    public int getCurrentJ() 
+    {
+        return currentJ;
+    }
+
+    public void setCurrentJ(int currentJ) 
+    {
+        this.currentJ = currentJ;
     }
 
     public int getToX() 
@@ -154,14 +174,14 @@ public abstract class GameObject
         return numberOfSteps;
     }
 
-    public ArrayList<GameObject> getMainNeighbors(int i,int j)
+    protected ArrayList<GameObject> getMainNeighbors(int i,int j)
     {
         ArrayList<GameObject> result=new ArrayList<GameObject>();
         
         return result;
     }
     
-    public ArrayList<GameObject> getAllNeighbors()
+    protected ArrayList<GameObject> getAllNeighbors()
     {
         ArrayList<GameObject> result=new ArrayList<GameObject>();
         
